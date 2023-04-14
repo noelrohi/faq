@@ -16,17 +16,12 @@ export const NavBar = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-b-slate-200 bg-white dark:border-b-slate-700 dark:bg-slate-900">
+      <header className="sticky top-0 z-40 w-full border-b border-b-slate-200 bg-white px-12 dark:border-b-slate-700 dark:bg-slate-900">
         <div className="container flex h-16 items-center">
           <div className="flex gap-4">
-            <Link className="flex items-center space-x-2" href="/">
-              <span className="ml-4 font-bold sm:inline-block">
-                Tiktok DEV FAQ
-              </span>
+            <Link className="flex items-center gap-4 space-x-2" href="/faq">
+              <span className="font-bold sm:inline-block">Tiktok DEV FAQ</span>
             </Link>
-            <nav className="flex items-center space-x-6 text-sm font-medium">
-              <Link href="/faq">FAQ</Link>
-            </nav>
           </div>
 
           <div className="flex flex-1 items-center justify-between space-x-2 sm:space-x-4 md:justify-end">
