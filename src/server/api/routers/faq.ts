@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { FAQFormSchema } from "~/pages/faq";
 
 import {
   createTRPCRouter,
@@ -7,19 +7,32 @@ import {
 } from "~/server/api/trpc";
 
 export const faqRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
 
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
+    return ctx.prisma.fAQ.findMany({
+        include: {
+            user: {
+                select : {
+                    image: true,
+                    name: true,
+                    id: true,
+                    
+                }
+            }
+        }
+    });
   }),
 
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
+  create: protectedProcedure
+    .input(FAQFormSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.fAQ.create({
+        data: {
+          question: input.question,
+          answer: input.answer,
+          user: { connect: { id: ctx.session.user.id } },
+        },
+      });
+    }),
+
 });

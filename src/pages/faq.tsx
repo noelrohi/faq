@@ -18,6 +18,8 @@ import { useZodForm } from "~/utils/zod-form";
 import { UserAvatar } from "~/components/UserAvatar";
 import { LoadingSpinner } from "~/components/Loading";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useToast } from "~/hooks/useToast";
 
 const Home: NextPage = () => {
   return (
@@ -58,37 +60,36 @@ function FAQPosts() {
       </div>
     );
 
-  if (!data) return <div>Something went wrong</div>;
+  if (!data) return <div>Nothing to display</div>;
 
   return (
     <>
       {data.map((faq) => (
-        <FAQCard {...faq} key={faq.faq.id} />
+        <FAQCard {...faq} key={faq.id} />
       ))}
     </>
   );
 }
 
 type FAQWithUser = RouterOutputs["faq"]["getAll"][number];
-function FAQCard(props: FAQWithUser) {
-  const { faq, user } = props;
+function FAQCard(faq: FAQWithUser) {
   return (
     <>
       <div>
         <div className="space-y-1">
-          <h4 className="text-sm font-medium leading-none">{faq.question}</h4>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            {faq.answer}
+          <h4 className="text-sm font-medium leading-none">Question: {faq.question}</h4>
+          <p className="text-sm">
+            Answer: {faq.answer}
           </p>
         </div>
         <Separator className="my-4" />
         <div className="flex h-5 items-center space-x-4 text-sm">
-          <Link href={`https://github.com/${user.username}`}>Github</Link>
+          <Link href={`https://github.com/${faq.user.id ?? ''}`}>Github</Link>
 
           <Separator orientation="vertical" />
           <div className="flex flex-row justify-center content-center">
-            <UserAvatar src={user.profileImageUrl} username={user.username} />{" "}
-            <div>{user.username}</div>
+            <UserAvatar src={faq.user.image ?? "" } username={faq.user.name ?? "shadn"} />{" "}
+            <div>{faq.user.name}</div>
           </div>
         </div>
       </div>
@@ -101,8 +102,8 @@ export const FAQFormSchema = z.object({
 });
 
 function FAQForm() {
-  const { isSignedIn } = useSession();
-
+    const { data: session } = useSession();
+    const { toast } = useToast();
   const methods = useZodForm({
     schema: FAQFormSchema,
   });
@@ -112,13 +113,17 @@ function FAQForm() {
     onSettled: async () => {
       await utils.faq.invalidate();
       methods.reset();
+      toast({
+        title: "Successfully posted a FAQ!",
+        description: "Close the Modal to check."
+      })
     },
   });
 
   const onSubmit = methods.handleSubmit(
     (data) => {
       // console.log(data);
-      createFAQ.mutate(data);
+      createFAQ.mutate(data);      
     },
     (e) => {
       console.log("Whoops... something went wrong!");
@@ -127,6 +132,7 @@ function FAQForm() {
   );
 
   return (
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     <form action="" className="flex flex-col gap-4" onSubmit={onSubmit}>
       <div className="space-y-1">
         <Label htmlFor="name">Question</Label>
@@ -151,8 +157,8 @@ function FAQForm() {
         </p>
       </div>
 
-      <Button type="submit" disabled={!isSignedIn}>
-        {!isSignedIn ? (
+      <Button type="submit" disabled={!session}>
+        {!session ? (
           "Sign in to Post"
         ) : createFAQ.isLoading ? (
           <>
