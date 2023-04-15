@@ -63,6 +63,7 @@ export const NavBar = () => {
 
 function UserDropdown(props: { src: string; fallback: string; alt: string }) {
   const { src, fallback, alt } = props;
+  const {data} = useSession()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -74,7 +75,7 @@ function UserDropdown(props: { src: string; fallback: string; alt: string }) {
       <DropdownMenuContent>
         <DropdownMenuLabel>{alt}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem asChild><Link href={`/user/${data?.user.id ?? ''}`}> Profile</Link></DropdownMenuItem>
         <DropdownMenuItem onClick={() => void signOut()}>
           Sign Out
         </DropdownMenuItem>
