@@ -37,8 +37,8 @@ const FAQPage: NextPage = () => {
         <Dialog>
           <DialogTrigger asChild>
             <Input
-              className="w-1/3 opacity-40"
-              value="What is my tech stack?"
+              className="w-1/3 opacity-70"
+              value="✍🏻 What is my tech stack?"
             />
           </DialogTrigger>
           <DialogContent>
@@ -90,14 +90,14 @@ export function FAQCard(props: {
   dayjs.extend(relativeTime);
 
   return (
-    <div className="flex- flex max-w-lg flex-row rounded-lg bg-white/10 p-4 transition-all hover:scale-[101%]">
+    <div className="flex max-w-lg flex-1 flex-row rounded-lg bg-white/10 p-4 transition-all hover:scale-[101%]">
       <Link href={`/user/${faq.user.id}`}>
         <Avatar className="mr-2 self-center">
           <AvatarImage src={faq.user.image?.toString()} alt="@shadcn" />
           <AvatarFallback>{faq.user.name?.substring(0, 2)}</AvatarFallback>
         </Avatar>
       </Link>
-      <Link href={`/faq/${faq.id}`}>
+      <Link href={`/faq/${faq.id}`} className="w-72">
         <div className="flex-grow">
           <h2 className="text-2xl font-bold">{faq.question}</h2>
           <p className="mt-2 text-sm">{faq.answer}</p>
@@ -106,7 +106,6 @@ export function FAQCard(props: {
           ).fromNow()}`}</p>
         </div>
       </Link>
-
       <Dialog>
         <DialogTrigger asChild>
           {faq.user.id === session?.user.id && (
