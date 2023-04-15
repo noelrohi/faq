@@ -15,6 +15,8 @@ import {
 } from "~/ui/dialog";
 import { Input } from "~/ui/input";
 import { api } from "~/utils/api";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Separator } from "~/ui/separator";
 
 const FAQPage: NextPage = () => {
   api.faq.getAll.useQuery();
@@ -29,7 +31,7 @@ const FAQPage: NextPage = () => {
       <PageLayout>
         <Dialog>
           <DialogTrigger asChild>
-            <div className="flex lg:w-1/3 w-full flex-1 flex-row rounded-md bg-white/10 p-4 shadow-md ">
+            <div className="flex w-full flex-1 flex-row rounded-md bg-white/10 p-4 shadow-md lg:w-1/3 ">
               <UserAvatar
                 src={data?.user.image ?? ""}
                 username={data?.user.name?.substring(0, 2) ?? ""}
@@ -48,6 +50,8 @@ const FAQPage: NextPage = () => {
             <FAQForm />
           </DialogContent>
         </Dialog>
+        <Separator className="lg:w-1/3" />
+
         <FAQPosts />
       </PageLayout>
     </>
@@ -56,6 +60,7 @@ const FAQPage: NextPage = () => {
 
 function FAQPosts() {
   const { data, isLoading } = api.faq.getAll.useQuery();
+  const [parent] = useAutoAnimate(/* optional config */);
 
   if (isLoading)
     return (
@@ -65,9 +70,8 @@ function FAQPosts() {
     );
 
   if (!data) return <div>Nothing to display</div>;
-
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2 " ref={parent}>
       {data.map((faq) => (
         <FAQCard faq={faq} key={faq.id} />
       ))}
