@@ -20,7 +20,7 @@ export const NavBar = () => {
         <div className="container flex h-16 items-center">
           <div className="flex gap-4">
             <Link className="flex items-center gap-4 space-x-2" href="/faq">
-              <span className="font-bold sm:inline-block">Tiktok DEV FAQ</span>
+              <span className="font-bold sm:inline-block">Coding / Programming FAQ</span>
             </Link>
           </div>
 

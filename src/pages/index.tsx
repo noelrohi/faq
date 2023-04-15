@@ -18,7 +18,7 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b">
         <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
           <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-            Tiktok <span className="text-[hsl(280,100%,70%)]">DEV</span> FAQ
+            CODING / <span className="text-[hsl(280,100%,70%)]">PROGRAMMING</span> FAQ
           </h1>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
             <Link
