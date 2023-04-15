@@ -18,13 +18,20 @@ export const FAQForm = () => {
 
   const utils = api.useContext();
   const createFAQ = api.faq.create.useMutation({
-    onSettled: async () => {
+    onSettled: async (data, error) => {
       await utils.faq.invalidate();
       methods.reset();
-      toast({
-        title: "Successfully posted a FAQ!",
-        description: "Close the Modal to check.",
-      });
+      if (!error) {
+        toast({
+          title: "Successfully posted a FAQ!",
+          description: "Close the Modal to check.",
+        });
+      } else {
+        toast({
+          title: "Something went wrong!",
+          description: error.message,
+        });
+      }
     },
   });
 
