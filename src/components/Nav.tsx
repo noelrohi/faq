@@ -20,11 +20,13 @@ export const NavBar = () => {
         <div className="container flex h-16 items-center">
           <div className="flex gap-4">
             <Link className="flex items-center gap-4 space-x-2" href="/faq">
-              <span className="font-bold sm:inline-block">Coding / Programming FAQ</span>
+              <span className="font-bold sm:inline-block">
+                Coding / Programming FAQ
+              </span>
             </Link>
           </div>
 
-          <div className="flex flex-1 items-center justify-between space-x-2 sm:space-x-4 md:justify-end">
+          <div className="flex flex-1 items-center space-x-2 sm:space-x-4 justify-end">
             <div className="flex flex-row items-center justify-center gap-4">
               <div>
                 {!sessionData && (

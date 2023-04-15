@@ -104,8 +104,7 @@ export const FAQForm = () => {
       <p className="font-medium text-red-500">{createFAQ.error?.message}</p>
     </form>
   );
-}
-
+};
 
 export function FAQCard(props: {
   faq: RouterOutputs["faq"]["getAll"][number];
@@ -121,14 +120,14 @@ export function FAQCard(props: {
   dayjs.extend(relativeTime);
 
   return (
-    <div className="flex max-w-lg flex-1 flex-row rounded-lg bg-white/10 p-4 transition-all hover:scale-[101%] shadow-md">
+    <div className="flex max-w-md flex-1 flex-row rounded-lg bg-white/10 p-4 shadow-md transition-all hover:scale-[101%] lg:max-w-lg">
       <Link href={`/user/${faq.user.id}`}>
         <Avatar className="mr-2 self-center">
           <AvatarImage src={faq.user.image?.toString()} alt="@shadcn" />
           <AvatarFallback>{faq.user.name?.substring(0, 2)}</AvatarFallback>
         </Avatar>
       </Link>
-      <Link href={`/faq/${faq.id}`} className="w-72">
+      <Link href={`/faq/${faq.id}`} className="w-full">
         <div className="flex-grow">
           <h2 className="text-2xl font-bold">{faq.question}</h2>
           <p className="mt-2 text-sm">{faq.answer}</p>

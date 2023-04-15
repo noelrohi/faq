@@ -1,21 +1,24 @@
 import { type NextPage } from "next";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 
 import { PageLayout } from "~/components/Layout";
 import { LoadingSpinner } from "~/components/Loading";
+import { UserAvatar } from "~/components/UserAvatar";
 import { FAQCard, FAQForm } from "~/components/faq";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from "~/ui/dialog";
 import { Input } from "~/ui/input";
-import { api } from "~/utils/api";  
+import { api } from "~/utils/api";
 
 const FAQPage: NextPage = () => {
   api.faq.getAll.useQuery();
+  const { data } = useSession();
   return (
     <>
       <Head>
@@ -26,10 +29,16 @@ const FAQPage: NextPage = () => {
       <PageLayout>
         <Dialog>
           <DialogTrigger asChild>
-            <Input
-              className="w-1/3 opacity-70"
-              value="✍🏻 What is my tech stack?"
-            />
+            <div className="flex lg:w-1/3 w-full flex-1 flex-row rounded-md bg-white/10 p-4 shadow-md ">
+              <UserAvatar
+                src={data?.user.image ?? ""}
+                username={data?.user.name?.substring(0, 2) ?? ""}
+              />
+              <Input
+                value="✍🏻 What is my tech stack?"
+                className="border-none text-xl opacity-50"
+              />
+            </div>
           </DialogTrigger>
           <DialogContent>
             <DialogTitle>Post a FAQ</DialogTitle>
@@ -58,7 +67,7 @@ function FAQPosts() {
   if (!data) return <div>Nothing to display</div>;
 
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col space-y-2">
       {data.map((faq) => (
         <FAQCard faq={faq} key={faq.id} />
       ))}
