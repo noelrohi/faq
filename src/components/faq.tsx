@@ -121,16 +121,23 @@ export function FAQCard(props: {
 
   return (
     <div className="flex max-w-md flex-1 flex-row rounded-lg bg-white/10 p-4 shadow-md transition-all hover:scale-[101%] lg:max-w-lg">
-      <Link href={`/user/${faq.user.id}`}>
+      <Link href={`/user/${faq.user.id}`} className="flex flex-col">
         <Avatar className="mr-2 self-center">
           <AvatarImage src={faq.user.image?.toString()} alt="@shadcn" />
           <AvatarFallback>{faq.user.name?.substring(0, 2)}</AvatarFallback>
         </Avatar>
       </Link>
       <Link href={`/faq/${faq.id}`} className="w-full">
-        <div className="flex-grow">
-          <h2 className="text-2xl font-bold">{faq.question}</h2>
-          <p className="mt-2 text-sm">{faq.answer}</p>
+        <div className="flex-grow space-y-3">
+          <h2 className="text-2xl font-bold">{faq.user.name}</h2>
+          <h4 className="flex flex-row gap-2">
+            <b>Q: </b> 
+            <p>{faq.question}</p>
+          </h4>
+          <div className="text-sm flex flex-row gap-2">
+            <b>A:</b>
+            <p>{faq.answer}</p>
+          </div>
           <p className="font-thin opacity-50">{`Posted ${dayjs(
             faq.createdAt
           ).fromNow()}`}</p>
@@ -142,6 +149,7 @@ export function FAQCard(props: {
             <Button
               variant="destructive"
               data-testid={`delete-post-${faq.question}`}
+              size={'sm'}
             >
               <Trash2Icon />
             </Button>
