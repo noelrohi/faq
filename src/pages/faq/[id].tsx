@@ -1,9 +1,9 @@
 import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
-import { FAQCard } from ".";
 import { PageLayout } from "~/components/Layout";
 import { generateSSGHelper } from "~/utils/ssg";
+import { FAQCard } from "~/components/faq";
 
 const SingleFAQPage: NextPage<{ id: string }> = ({ id }) => {
   const { data } = api.faq.getById.useQuery({

@@ -4,10 +4,9 @@ import { api } from "~/utils/api";
 import { PageLayout } from "~/components/Layout";
 import { generateSSGHelper } from "~/utils/ssg";
 import { LoadingSpinner } from "~/components/Loading";
-import { FAQCard } from "../faq";
+import { FAQCard } from "~/components/faq";
 
 const ProfilePage: NextPage<{ id: string }> = ({ id }) => {
-  // console.log(userId);
   const { data } = api.user.getByID.useQuery({
     userId : id,
   });

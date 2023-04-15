@@ -1,28 +1,18 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { Button } from "~/ui/button";
 
-import { DialogClose } from "@radix-ui/react-dialog";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import { Trash2Icon } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { FAQForm } from "~/components/FAQForm";
 import { PageLayout } from "~/components/Layout";
 import { LoadingSpinner } from "~/components/Loading";
-import { Avatar, AvatarFallback, AvatarImage } from "~/ui/avatar";
+import { FAQCard, FAQForm } from "~/components/faq";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
-  DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "~/ui/dialog";
 import { Input } from "~/ui/input";
-import { api, type RouterOutputs } from "~/utils/api";
-import Link from "next/link";
+import { api } from "~/utils/api";  
 
 const FAQPage: NextPage = () => {
   api.faq.getAll.useQuery();
@@ -75,103 +65,5 @@ function FAQPosts() {
     </div>
   );
 }
-
-export function FAQCard(props: {
-  faq: RouterOutputs["faq"]["getAll"][number];
-}) {
-  const { data: session } = useSession();
-  const { faq } = props;
-  const utils = api.useContext();
-  const deletePost = api.faq.delete.useMutation({
-    onSettled: async () => {
-      await utils.faq.invalidate();
-    },
-  });
-  dayjs.extend(relativeTime);
-
-  return (
-    <div className="flex max-w-lg flex-1 flex-row rounded-lg bg-white/10 p-4 transition-all hover:scale-[101%]">
-      <Link href={`/user/${faq.user.id}`}>
-        <Avatar className="mr-2 self-center">
-          <AvatarImage src={faq.user.image?.toString()} alt="@shadcn" />
-          <AvatarFallback>{faq.user.name?.substring(0, 2)}</AvatarFallback>
-        </Avatar>
-      </Link>
-      <Link href={`/faq/${faq.id}`} className="w-72">
-        <div className="flex-grow">
-          <h2 className="text-2xl font-bold">{faq.question}</h2>
-          <p className="mt-2 text-sm">{faq.answer}</p>
-          <p className="font-thin opacity-50">{`Posted ${dayjs(
-            faq.createdAt
-          ).fromNow()}`}</p>
-        </div>
-      </Link>
-      <Dialog>
-        <DialogTrigger asChild>
-          {faq.user.id === session?.user.id && (
-            <Button
-              variant="destructive"
-              data-testid={`delete-post-${faq.question}`}
-            >
-              <Trash2Icon />
-            </Button>
-          )}
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete Post</DialogTitle>
-            <DialogClose />
-          </DialogHeader>
-          <DialogDescription>
-            Are you sure you want to delete this post? This action cannot be
-            reverted.
-          </DialogDescription>
-
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button
-                variant="destructive"
-                disabled={!session}
-                onClick={() => deletePost.mutate({ id: faq.id })}
-              >
-                Delete
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-}
-
-// function FAQCard(faq: FAQWithUser) {
-//   const { data: session } = useSession();
-//   dayjs.extend(relativeTime);
-//   return (
-//     <>
-//       <div className="w-80 max-w-lg rounded-lg p-4 shadow-md shadow-slate-800 dark:shadow-slate-700">
-//         <div className="flex flex-row">
-//           <UserAvatar
-//             src={faq.user.image ?? ""}
-//             username={faq.user.name ?? "shadn"}
-//           />
-//           <div className="space-y-1 text-sm">
-//             <h4 className="font-medium leading-none">{faq.question}</h4>
-//             <Separator />
-//             <p>{faq.answer}</p>
-//             <div className="font-thin">
-//               {`${dayjs(faq.createdAt).fromNow()} by ${faq.user.name ?? ""}`}
-//             </div>
-//             {faq.user.id === session?.user.id && (
-//               <Button variant="destructive" size={"sm"}>
-//                 Delete
-//               </Button>
-//             )}
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
 
 export default FAQPage;
