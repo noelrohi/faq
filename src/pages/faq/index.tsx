@@ -61,6 +61,7 @@ const FAQPage: NextPage = () => {
 function FAQPosts() {
   const { data, isLoading } = api.faq.getAll.useQuery();
   const [parent] = useAutoAnimate(/* optional config */);
+  console.log(data)
 
   if (isLoading)
     return (
@@ -69,7 +70,7 @@ function FAQPosts() {
       </div>
     );
 
-  if (!data) return <div>Nothing to display</div>;
+  if (!data || data.length == 0) return <div>Nothing to display</div>;
   return (
     <div className="flex flex-col space-y-2 " ref={parent}>
       {data.map((faq) => (
