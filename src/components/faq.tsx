@@ -120,7 +120,7 @@ export function FAQCard(props: {
   dayjs.extend(relativeTime);
 
   return (
-    <div className="flex max-w-md flex-1 flex-row rounded-lg bg-white/10 p-4 shadow-md transition-all hover:scale-[101%] lg:max-w-lg">
+    <div className="flex w-full flex-1 flex-row rounded-md bg-white/10 p-4 shadow-md lg:w-full lg:max-w-lg">
       <Link href={`/user/${faq.user.id}`} className="flex flex-col">
         <Avatar className="mr-2 self-center">
           <AvatarImage src={faq.user.image?.toString()} alt="@shadcn" />
@@ -131,10 +131,10 @@ export function FAQCard(props: {
         <div className="flex-grow space-y-3">
           <h2 className="text-2xl font-bold">{faq.user.name}</h2>
           <h4 className="flex flex-row gap-2">
-            <b>Q: </b> 
+            <b>Q: </b>
             <p>{faq.question}</p>
           </h4>
-          <div className="text-sm flex flex-row gap-2">
+          <div className="flex flex-row gap-2 text-sm">
             <b>A:</b>
             <p>{faq.answer}</p>
           </div>
@@ -149,7 +149,7 @@ export function FAQCard(props: {
             <Button
               variant="destructive"
               data-testid={`delete-post-${faq.question}`}
-              size={'sm'}
+              size={"sm"}
             >
               <Trash2Icon />
             </Button>

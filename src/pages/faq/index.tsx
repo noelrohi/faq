@@ -2,8 +2,9 @@ import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { PageLayout } from "~/components/Layout";
-import { LoadingSpinner } from "~/components/Loading";
+import { FAQSkeleton } from "~/components/Loading";
 import { UserAvatar } from "~/components/UserAvatar";
 import { FAQCard, FAQForm } from "~/components/faq";
 import {
@@ -14,9 +15,8 @@ import {
   DialogTrigger,
 } from "~/ui/dialog";
 import { Input } from "~/ui/input";
-import { api } from "~/utils/api";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Separator } from "~/ui/separator";
+import { api } from "~/utils/api";
 
 const FAQPage: NextPage = () => {
   api.faq.getAll.useQuery();
@@ -31,7 +31,7 @@ const FAQPage: NextPage = () => {
       <PageLayout>
         <Dialog>
           <DialogTrigger asChild>
-            <div className="flex w-full flex-1 flex-row rounded-md bg-white/10 p-4 shadow-md lg:w-1/3 ">
+            <div className="flex w-full flex-1 flex-row rounded-md bg-white/10 p-4 shadow-md lg:max-w-lg ">
               <UserAvatar
                 src={data?.user.image ?? ""}
                 username={data?.user.name?.substring(0, 2) ?? ""}
@@ -50,7 +50,7 @@ const FAQPage: NextPage = () => {
             <FAQForm />
           </DialogContent>
         </Dialog>
-        <Separator className="lg:w-1/3" />
+        <Separator className="lg:max-w-lg" />
 
         <FAQPosts />
       </PageLayout>
@@ -61,13 +61,13 @@ const FAQPage: NextPage = () => {
 function FAQPosts() {
   const { data, isLoading } = api.faq.getAll.useQuery();
   const [parent] = useAutoAnimate(/* optional config */);
-  console.log(data)
+  console.log(data);
 
   if (isLoading)
     return (
-      <div className="flex grow">
-        <LoadingSpinner />
-      </div>
+      <>
+        <FAQSkeleton count={4}/>
+      </>
     );
 
   if (!data || data.length == 0) return <div>Nothing to display</div>;
